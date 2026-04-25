@@ -1,0 +1,40 @@
+﻿@page "/"
+
+<PageTitle>Music Practice Scheduler</PageTitle>
+
+<h1>Music Practice Scheduler</h1>
+
+<p>Welcome! This app helps you organize and track your music practice sessions.</p>
+
+<div style="margin: 20px 0;">
+    <h3>What you can do:</h3>
+    <ul>
+        <li>Manage your songs and organize them by genre</li>
+        <li>Schedule practice sessions and track them</li>
+        <li>See your recently practiced songs</li>
+    </ul>
+</div>
+
+<div style="margin: 20px 0;">
+    <h3>Get Started:</h3>
+    <NavLink href="songs" class="btn btn-primary">Go to Songs</NavLink>
+    <NavLink href="schedule" class="btn btn-primary" style="margin-left: 10px;">Go to Schedule</NavLink>
+</div>
+
+<div style="margin-top: 30px; padding: 15px; background-color: #f0f0f0;">
+    <h4>Quick Stats</h4>
+    <p>Total Songs: <strong>@totalSongs</strong></p>
+    <p>Upcoming Sessions: <strong>@upcomingSessions</strong></p>
+</div>
+
+@code {
+    private int totalSongs = 0;
+    private int upcomingSessions = 0;
+
+    protected override void OnInitialized()
+    {
+        // Initialize with default values
+        totalSongs = 0;
+        upcomingSessions = 0;
+    }
+}

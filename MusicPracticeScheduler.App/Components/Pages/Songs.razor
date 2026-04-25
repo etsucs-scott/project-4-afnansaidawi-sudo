@@ -1,0 +1,217 @@
+@page "/songs"
+
+<PageTitle>Songs - Music Practice Scheduler</PageTitle>
+
+<h1>Manage Your Songs</h1>
+
+<!-- Add new song form -->
+<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
+    <h3>Add New Song</h3>
+    
+    <div style="margin: 10px 0;">
+        <label>Song Name:</label><br/>
+        <input type="text" @bind="newSongName" style="width: 100%; padding: 5px;"/>
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label>Artist:</label><br/>
+        <input type="text" @bind="newArtist" style="width: 100%; padding: 5px;"/>
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label>Genre:</label><br/>
+        <input type="text" @bind="newGenre" style="width: 100%; padding: 5px;"/>
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label>Duration (minutes):</label><br/>
+        <input type="number" @bind="newDuration" style="width: 100%; padding: 5px;"/>
+    </div>
+
+    <button @onclick="AddSong" style="padding: 8px 15px; background-color: #28a745; color: white; border: none; cursor: pointer;">
+        Add Song
+    </button>
+
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <p style="color: red; margin-top: 10px;">Error: @errorMessage</p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(successMessage))
+    {
+        <p style="color: green; margin-top: 10px;">@successMessage</p>
+    }
+</div>
+
+<!-- Display all songs -->
+<div>
+    <h3>All Songs (@songs.Count)</h3>
+    
+    @if (songs.Count == 0)
+    {
+        <p>No songs added yet. Add your first song above!</p>
+    }
+    else
+    {
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f0f0f0;">
+                    <th style="border: 1px solid #ccc; padding: 8px;">Name</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Artist</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Genre</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Duration</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Completed</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var song in songs)
+                {
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@song.Name</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@song.Artist</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@song.Genre</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@song.DurationMinutes min</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">
+                            @if (song.IsCompleted)
+                            {
+                                <span>✓ Yes</span>
+                            }
+                            else
+                            {
+                                <span>No</span>
+                            }
+                        </td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">
+                            <button @onclick="() => RemoveSong(song.Name)" style="padding: 5px 10px; background-color: #dc3545; color: white; border: none; cursor: pointer;">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<!-- Display genres -->
+<div style="margin-top: 30px;">
+    <h3>Genres</h3>
+    @if (genres.Count == 0)
+    {
+        <p>No genres yet.</p>
+    }
+    else
+    {
+        <div>
+            @foreach (var genre in genres)
+            {
+                <span style="display: inline-block; background-color: #007bff; color: white; padding: 5px 10px; margin: 5px; border-radius: 3px;">
+                    @genre
+                </span>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    // Data for new song form
+    private string newSongName = "";
+    private string newArtist = "";
+    private string newGenre = "";
+    private int newDuration = 0;
+
+    // Display messages
+    private string errorMessage = "";
+    private string successMessage = "";
+
+    // Data lists
+    private List<Song> songs = new List<Song>();
+    private List<string> genres = new List<string>();
+
+    // Scheduler instance
+    private MusicScheduler scheduler = new MusicScheduler();
+
+    // Initialize the page
+    protected override void OnInitialized()
+    {
+        // Load songs and genres from scheduler
+        RefreshData();
+    }
+
+    // Add a new song
+    private void AddSong()
+    {
+        errorMessage = "";
+        successMessage = "";
+
+        try
+        {
+            // Validate inputs
+            if (string.IsNullOrWhiteSpace(newSongName))
+            {
+                errorMessage = "Song name cannot be empty";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(newArtist))
+            {
+                errorMessage = "Artist cannot be empty";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(newGenre))
+            {
+                errorMessage = "Genre cannot be empty";
+                return;
+            }
+
+            if (newDuration <= 0)
+            {
+                errorMessage = "Duration must be greater than 0";
+                return;
+            }
+
+            // Add song to scheduler
+            scheduler.AddSong(newSongName, newArtist, newGenre, newDuration);
+
+            // Clear form
+            newSongName = "";
+            newArtist = "";
+            newGenre = "";
+            newDuration = 0;
+
+            // Show success message
+            successMessage = "Song added successfully!";
+
+            // Refresh display
+            RefreshData();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+
+    // Remove a song
+    private void RemoveSong(string songName)
+    {
+        try
+        {
+            scheduler.RemoveSong(songName);
+            RefreshData();
+            successMessage = "Song removed successfully!";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error removing song: " + ex.Message;
+        }
+    }
+
+    // Refresh songs and genres from scheduler
+    private void RefreshData()
+    {
+        songs = scheduler.GetAllSongs();
+        genres = scheduler.GetAllGenres();
+    }
+}

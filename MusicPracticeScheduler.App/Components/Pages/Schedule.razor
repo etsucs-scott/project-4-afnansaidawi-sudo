@@ -1,0 +1,200 @@
+@page "/schedule"
+
+<PageTitle>Schedule - Music Practice Scheduler</PageTitle>
+
+<h1>Practice Schedule</h1>
+
+<!-- Schedule new session form -->
+<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
+    <h3>Schedule New Practice Session</h3>
+
+    <div style="margin: 10px 0;">
+        <label>Song Name:</label><br/>
+        <input type="text" @bind="newSessionSongName" style="width: 100%; padding: 5px;"/>
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label>Duration (minutes):</label><br/>
+        <input type="number" @bind="newSessionDuration" style="width: 100%; padding: 5px;"/>
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label>Notes:</label><br/>
+        <textarea @bind="newSessionNotes" style="width: 100%; padding: 5px; height: 80px;"></textarea>
+    </div>
+
+    <button @onclick="ScheduleSession" style="padding: 8px 15px; background-color: #28a745; color: white; border: none; cursor: pointer;">
+        Schedule Session
+    </button>
+
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <p style="color: red; margin-top: 10px;">Error: @errorMessage</p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(successMessage))
+    {
+        <p style="color: green; margin-top: 10px;">@successMessage</p>
+    }
+</div>
+
+<!-- Display upcoming sessions -->
+<div style="margin-bottom: 30px;">
+    <h3>Upcoming Sessions (@upcomingSessions.Count)</h3>
+
+    @if (upcomingSessions.Count == 0)
+    {
+        <p>No upcoming sessions scheduled. Schedule one above!</p>
+    }
+    else
+    {
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f0f0f0;">
+                    <th style="border: 1px solid #ccc; padding: 8px;">Song Name</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Date</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Duration</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Notes</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var session in upcomingSessions)
+                {
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@session.SongName</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@session.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@session.DurationMinutes min</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@session.Notes</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">
+                            <button @onclick="() => CompleteSession()" style="padding: 5px 10px; background-color: #007bff; color: white; border: none; cursor: pointer;">
+                                Complete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<!-- Display recently practiced songs (Stack) -->
+<div>
+    <h3>Recently Practiced Songs (@recentlyPracticed.Count)</h3>
+
+    @if (recentlyPracticed.Count == 0)
+    {
+        <p>No recently practiced songs yet. Complete a practice session to see them here.</p>
+    }
+    else
+    {
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f0f0f0;">
+                    <th style="border: 1px solid #ccc; padding: 8px;">Song Name</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Artist</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Genre</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var song in recentlyPracticed)
+                {
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@song.Name</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@song.Artist</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@song.Genre</td>
+                        <td style="border: 1px solid #ccc; padding: 8px;">@song.DurationMinutes min</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    // Data for new session form
+    private string newSessionSongName = "";
+    private int newSessionDuration = 0;
+    private string newSessionNotes = "";
+
+    // Display messages
+    private string errorMessage = "";
+    private string successMessage = "";
+
+    // Data lists
+    private List<PracticeSession> upcomingSessions = new List<PracticeSession>();
+    private List<Song> recentlyPracticed = new List<Song>();
+
+    // Scheduler instance
+    private MusicScheduler scheduler = new MusicScheduler();
+
+    // Initialize the page
+    protected override void OnInitialized()
+    {
+        RefreshData();
+    }
+
+    // Schedule a new practice session
+    private void ScheduleSession()
+    {
+        errorMessage = "";
+        successMessage = "";
+
+        try
+        {
+            // Validate inputs
+            if (string.IsNullOrWhiteSpace(newSessionSongName))
+            {
+                errorMessage = "Song name cannot be empty";
+                return;
+            }
+
+            if (newSessionDuration <= 0)
+            {
+                errorMessage = "Duration must be greater than 0";
+                return;
+            }
+
+            // Schedule the session
+            scheduler.ScheduleSession(newSessionSongName, newSessionDuration, newSessionNotes);
+
+            // Clear form
+            newSessionSongName = "";
+            newSessionDuration = 0;
+            newSessionNotes = "";
+
+            // Show success message
+            successMessage = "Session scheduled successfully!";
+
+            // Refresh display
+            RefreshData();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+
+    // Complete the next session
+    private void CompleteSession()
+    {
+        try
+        {
+            scheduler.CompleteNextSession();
+            successMessage = "Session completed!";
+            RefreshData();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error completing session: " + ex.Message;
+        }
+    }
+
+    // Refresh data from scheduler
+    private void RefreshData()
+    {
+        upcomingSessions = scheduler.GetUpcomingSessions();
+        recentlyPracticed = scheduler.GetRecentlyPracticed();
+    }
+}

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MusicPracticeScheduler.App/MusicPracticeScheduler.App.csproj" />
+  <Project Path="MusicPracticeScheduler.Tests/MusicPracticeScheduler.Tests.csproj" />
+</Solution>
