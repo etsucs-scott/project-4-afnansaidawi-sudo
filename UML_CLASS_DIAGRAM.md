@@ -58,7 +58,8 @@ Class: MusicScheduler
 │   ├── MarkSongComplete(songName): void
 │   ├── SongExists(songName): bool
 │   ├── GetTotalSongs(): int
-│   └── Clear(): void
+│   ├── Clear(): void
+│   └── **LoadDefaultSongs(): void**
 ```
 
 **Responsibility**: Manages all songs, genres, and practice sessions using appropriate data structures.
@@ -68,7 +69,7 @@ Class: MusicScheduler
 - **HashSet<string>**: Automatically prevents duplicate genres
 - **Queue<PracticeSession>**: FIFO order - first scheduled session is first to complete
 - **Stack<Song>**: LIFO order - most recently practiced song is on top
-
+**Sample Data**: Includes LoadDefaultSongs() method that adds 20 popular songs across Rock, Pop, and Classic genres for demonstration and testing purposes.
 ---
 
 ### LocalStorageService Class
@@ -228,3 +229,4 @@ Display updated in UI
 ✓ No advanced C# features
 ✓ No design patterns or architectural complexity
 ✓ Easy to follow and understand
+✓ Includes 20 sample songs for demonstration

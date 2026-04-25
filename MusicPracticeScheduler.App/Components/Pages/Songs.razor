@@ -32,6 +32,10 @@
         Add Song
     </button>
 
+    <button @onclick="LoadDefaultSongs" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; margin-left: 10px;">
+        Load 20 Sample Songs
+    </button>
+
     @if (!string.IsNullOrWhiteSpace(errorMessage))
     {
         <p style="color: red; margin-top: 10px;">Error: @errorMessage</p>
@@ -213,5 +217,20 @@
     {
         songs = scheduler.GetAllSongs();
         genres = scheduler.GetAllGenres();
+    }
+
+    // Load 20 default sample songs
+    private void LoadDefaultSongs()
+    {
+        try
+        {
+            scheduler.LoadDefaultSongs();
+            successMessage = "Loaded 20 sample songs successfully!";
+            RefreshData();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error loading sample songs: " + ex.Message;
+        }
     }
 }

@@ -19,22 +19,48 @@
     <h3>Get Started:</h3>
     <NavLink href="songs" class="btn btn-primary">Go to Songs</NavLink>
     <NavLink href="schedule" class="btn btn-primary" style="margin-left: 10px;">Go to Schedule</NavLink>
-</div>
-
-<div style="margin-top: 30px; padding: 15px; background-color: #f0f0f0;">
-    <h4>Quick Stats</h4>
+    <button @onclick="LoadDefaultSongs" class="btn btn-secondary" style="margin-left: 10px;">Load Sample Data</button>
     <p>Total Songs: <strong>@totalSongs</strong></p>
     <p>Upcoming Sessions: <strong>@upcomingSessions</strong></p>
+    @if (!string.IsNullOrWhiteSpace(message))
+    {
+        <p style="color: green; font-weight: bold;">@message</p>
+    }
 </div>
 
 @code {
     private int totalSongs = 0;
     private int upcomingSessions = 0;
+    private string message = "";
+
+    // Scheduler instance
+    private MusicScheduler scheduler = new MusicScheduler();
 
     protected override void OnInitialized()
     {
         // Initialize with default values
-        totalSongs = 0;
-        upcomingSessions = 0;
+        UpdateStats();
+    }
+
+    // Load 20 default sample songs
+    private void LoadDefaultSongs()
+    {
+        try
+        {
+            scheduler.LoadDefaultSongs();
+            message = "Loaded 20 sample songs successfully!";
+            UpdateStats();
+        }
+        catch (Exception ex)
+        {
+            message = "Error loading sample songs: " + ex.Message;
+        }
+    }
+
+    // Update statistics display
+    private void UpdateStats()
+    {
+        totalSongs = scheduler.GetTotalSongs();
+        upcomingSessions = scheduler.GetUpcomingSessions().Count;
     }
 }

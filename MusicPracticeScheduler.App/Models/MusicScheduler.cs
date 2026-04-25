@@ -181,4 +181,38 @@ public class MusicScheduler
         upcomingSessions.Clear();
         recentlyPracticed.Clear();
     }
+
+    // Load default songs for demonstration
+    // This method adds 20 sample songs to get started
+    public void LoadDefaultSongs()
+    {
+        // Clear existing data first
+        Clear();
+
+        // Add 20 sample songs with different genres
+        AddSong("Imagine", "John Lennon", "Rock", 3);
+        AddSong("Bohemian Rhapsody", "Queen", "Rock", 6);
+        AddSong("Hotel California", "Eagles", "Rock", 7);
+        AddSong("Stairway to Heaven", "Led Zeppelin", "Rock", 8);
+        AddSong("Dream On", "Aerosmith", "Rock", 5);
+
+        AddSong("Billie Jean", "Michael Jackson", "Pop", 5);
+        AddSong("Thriller", "Michael Jackson", "Pop", 6);
+        AddSong("Bad", "Michael Jackson", "Pop", 5);
+        AddSong("Beat It", "Michael Jackson", "Pop", 5);
+        AddSong("Smooth Criminal", "Michael Jackson", "Pop", 5);
+
+        AddSong("Shape of You", "Ed Sheeran", "Pop", 4);
+        AddSong("Thinking Out Loud", "Ed Sheeran", "Pop", 5);
+        AddSong("Photograph", "Ed Sheeran", "Pop", 5);
+        AddSong("Castle on the Hill", "Ed Sheeran", "Pop", 4);
+        AddSong("Perfect", "Ed Sheeran", "Pop", 4);
+
+        AddSong("Yesterday", "The Beatles", "Classic", 3);
+        AddSong("Let It Be", "The Beatles", "Classic", 4);
+        AddSong("Hey Jude", "The Beatles", "Classic", 7);
+        AddSong("Twist and Shout", "The Beatles", "Classic", 3);
+        AddSong("All You Need Is Love", "The Beatles", "Classic", 4);
+    }
 }
+

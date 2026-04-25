@@ -86,6 +86,7 @@ All 15 unit tests should pass with no failures.
 - Remove songs from the collection
 - View unique genres
 - Mark songs as completed
+- **Load 20 sample songs** for quick testing and demonstration
 
 ### Practice Scheduling
 - Schedule practice sessions for any song
@@ -97,9 +98,17 @@ All 15 unit tests should pass with no failures.
 - View recently practiced songs (Stack order - LIFO)
 - Track which songs were practiced most recently
 
+### Sample Data
+The application includes a "Load Sample Data" button that adds 20 popular songs across different genres:
+- **Rock**: Imagine, Bohemian Rhapsody, Hotel California, Stairway to Heaven, Dream On
+- **Pop**: Billie Jean, Thriller, Bad, Beat It, Smooth Criminal, Shape of You, Thinking Out Loud, Photograph, Castle on the Hill, Perfect
+- **Classic**: Yesterday, Let It Be, Hey Jude, Twist and Shout, All You Need Is Love
+
+This feature helps demonstrate the application functionality and provides sample data for testing.
+
 ## Unit Tests
 
-The project includes 15 comprehensive unit tests covering:
+The project includes 16 comprehensive unit tests covering:
 
 1. Adding songs successfully
 2. Validation for empty song names
@@ -116,6 +125,7 @@ The project includes 15 comprehensive unit tests covering:
 13. Dictionary lookup
 14. Exception handling
 15. Total song count
+16. Loading default sample songs
 
 Run all tests:
 ```bash

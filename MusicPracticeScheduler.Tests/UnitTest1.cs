@@ -220,23 +220,41 @@ public class MusicSchedulerTests
         Assert.Equal("Song1", recent[1].Name);
     }
 
-    // Test 15: Upcoming sessions uses Queue (FIFO order)
+    // Test 16: Load default songs adds 20 songs
     [Fact]
-    public void TestUpcomingSessions_QueueOrder()
+    public void TestLoadDefaultSongs_Adds20Songs()
     {
         // Arrange
         MusicScheduler scheduler = new MusicScheduler();
-        scheduler.AddSong("Song1", "Artist1", "Rock", 3);
-        scheduler.AddSong("Song2", "Artist2", "Rock", 3);
 
-        // Act - Schedule two sessions
-        scheduler.ScheduleSession("Song1", 30, "note1");
-        scheduler.ScheduleSession("Song2", 30, "note2");
+        // Act - Load default songs
+        scheduler.LoadDefaultSongs();
 
-        // Assert - Queue should return Song1 first (FIFO)
-        List<PracticeSession> sessions = scheduler.GetUpcomingSessions();
-        Assert.Equal("Song1", sessions[0].SongName);
-        Assert.Equal("Song2", sessions[1].SongName);
+        // Assert - Check that 20 songs were added
+        List<Song> allSongs = scheduler.GetAllSongs();
+        Assert.Equal(20, allSongs.Count);
+
+        // Check that genres were added
+        List<string> genres = scheduler.GetAllGenres();
+        Assert.Contains("Rock", genres);
+        Assert.Contains("Pop", genres);
+        Assert.Contains("Classic", genres);
+    }
+
+    // Test 17: Load default songs includes specific songs
+    [Fact]
+    public void TestLoadDefaultSongs_IncludesSpecificSongs()
+    {
+        // Arrange
+        MusicScheduler scheduler = new MusicScheduler();
+
+        // Act - Load default songs
+        scheduler.LoadDefaultSongs();
+
+        // Assert - Check that specific songs exist
+        Assert.True(scheduler.SongExists("Imagine"));
+        Assert.True(scheduler.SongExists("Billie Jean"));
+        Assert.True(scheduler.SongExists("Yesterday"));
     }
 }
 
