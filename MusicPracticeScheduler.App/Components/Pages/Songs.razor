@@ -5,89 +5,88 @@
 <h1>Manage Your Songs</h1>
 
 <!-- Add new song form -->
-<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <h3>Add New Song</h3>
+<div class="form-container">
+    <h3 style="margin-top: 0;">Add New Song</h3>
     
-    <div style="margin: 10px 0;">
-        <label>Song Name:</label><br/>
-        <input type="text" @bind="newSongName" style="width: 100%; padding: 5px;"/>
+    <div style="margin: 12px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Song Name:</label>
+        <input type="text" @bind="newSongName" style="width: 100%; padding: 10px; box-sizing: border-box;"/>
     </div>
 
-    <div style="margin: 10px 0;">
-        <label>Artist:</label><br/>
-        <input type="text" @bind="newArtist" style="width: 100%; padding: 5px;"/>
+    <div style="margin: 12px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Artist:</label>
+        <input type="text" @bind="newArtist" style="width: 100%; padding: 10px; box-sizing: border-box;"/>
     </div>
 
-    <div style="margin: 10px 0;">
-        <label>Genre:</label><br/>
-        <input type="text" @bind="newGenre" style="width: 100%; padding: 5px;"/>
+    <div style="margin: 12px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Genre:</label>
+        <input type="text" @bind="newGenre" style="width: 100%; padding: 10px; box-sizing: border-box;"/>
     </div>
 
-    <div style="margin: 10px 0;">
-        <label>Duration (minutes):</label><br/>
-        <input type="number" @bind="newDuration" style="width: 100%; padding: 5px;"/>
+    <div style="margin: 12px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Duration (minutes):</label>
+        <input type="number" @bind="newDuration" style="width: 100%; padding: 10px; box-sizing: border-box;"/>
     </div>
 
-    <button @onclick="AddSong" style="padding: 8px 15px; background-color: #28a745; color: white; border: none; cursor: pointer;">
+    <button @onclick="AddSong" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; cursor: pointer; border-radius: 6px; font-weight: 500;">
         Add Song
-    </button>
-
-    <button @onclick="LoadDefaultSongs" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; margin-left: 10px;">
-        Load 20 Sample Songs
     </button>
 
     @if (!string.IsNullOrWhiteSpace(errorMessage))
     {
-        <p style="color: red; margin-top: 10px;">Error: @errorMessage</p>
+        <p class="error-message">Error: @errorMessage</p>
     }
 
     @if (!string.IsNullOrWhiteSpace(successMessage))
     {
-        <p style="color: green; margin-top: 10px;">@successMessage</p>
+        <p class="success-message">@successMessage</p>
     }
 </div>
 
 <!-- Display all songs -->
-<div>
-    <h3>All Songs (@songs.Count)</h3>
+<div class="form-container">
+    <h3 style="margin-top: 0;">All Songs (<span style="color: #667eea;">@songs.Count</span>)</h3>
     
     @if (songs.Count == 0)
     {
-        <p>No songs added yet. Add your first song above!</p>
+        <p style="color: #666; text-align: center; padding: 20px;">No songs added yet. Add your first song above!</p>
     }
     else
     {
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
-                <tr style="background-color: #f0f0f0;">
-                    <th style="border: 1px solid #ccc; padding: 8px;">Name</th>
-                    <th style="border: 1px solid #ccc; padding: 8px;">Artist</th>
-                    <th style="border: 1px solid #ccc; padding: 8px;">Genre</th>
-                    <th style="border: 1px solid #ccc; padding: 8px;">Duration</th>
-                    <th style="border: 1px solid #ccc; padding: 8px;">Completed</th>
-                    <th style="border: 1px solid #ccc; padding: 8px;">Action</th>
+                <tr>
+                    <th style="padding: 12px 8px;">Name</th>
+                    <th style="padding: 12px 8px;">Artist</th>
+                    <th style="padding: 12px 8px;">Genre</th>
+                    <th style="padding: 12px 8px;">Duration</th>
+                    <th style="padding: 12px 8px;">Completed</th>
+                    <th style="padding: 12px 8px;">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var song in songs)
                 {
                     <tr>
-                        <td style="border: 1px solid #ccc; padding: 8px;">@song.Name</td>
-                        <td style="border: 1px solid #ccc; padding: 8px;">@song.Artist</td>
-                        <td style="border: 1px solid #ccc; padding: 8px;">@song.Genre</td>
-                        <td style="border: 1px solid #ccc; padding: 8px;">@song.DurationMinutes min</td>
-                        <td style="border: 1px solid #ccc; padding: 8px;">
+                        <td>@song.Name</td>
+                        <td>@song.Artist</td>
+                        <td>@song.Genre</td>
+                        <td>@song.DurationMinutes min</td>
+                        <td>
                             @if (song.IsCompleted)
                             {
-                                <span>✓ Yes</span>
+                                <span style="color: #28a745; font-weight: bold;">Yes</span>
                             }
                             else
                             {
-                                <span>No</span>
+                                <span style="color: #999;">No</span>
                             }
                         </td>
-                        <td style="border: 1px solid #ccc; padding: 8px;">
-                            <button @onclick="() => RemoveSong(song.Name)" style="padding: 5px 10px; background-color: #dc3545; color: white; border: none; cursor: pointer;">
+                        <td style="text-align: center;">
+                            <button @onclick="() => OpenEditModal(song)" style="padding: 6px 12px; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px; margin-right: 5px; font-size: 12px;">
+                                Edit
+                            </button>
+                            <button @onclick="() => RemoveSong(song.Name)" style="padding: 6px 12px; background-color: #dc3545; color: white; border: none; cursor: pointer; border-radius: 4px; font-size: 12px;">
                                 Delete
                             </button>
                         </td>
@@ -97,6 +96,50 @@
         </table>
     }
 </div>
+
+<!-- Edit Song Modal -->
+@if (showEditModal)
+{
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000;">
+        <div style="background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); width: 90%; max-width: 500px;">
+            <h2 style="margin-top: 0; color: #667eea;">Edit Song</h2>
+            
+            <div style="margin: 15px 0;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Song Name:</label>
+                <input type="text" @bind="editSongName" style="width: 100%; padding: 10px; box-sizing: border-box;"/>
+            </div>
+
+            <div style="margin: 15px 0;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Artist:</label>
+                <input type="text" @bind="editArtist" style="width: 100%; padding: 10px; box-sizing: border-box;"/>
+            </div>
+
+            <div style="margin: 15px 0;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Genre:</label>
+                <input type="text" @bind="editGenre" style="width: 100%; padding: 10px; box-sizing: border-box;"/>
+            </div>
+
+            <div style="margin: 15px 0;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Duration (minutes):</label>
+                <input type="number" @bind="editDuration" style="width: 100%; padding: 10px; box-sizing: border-box;"/>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(editErrorMessage))
+            {
+                <p class="error-message">⚠️ @editErrorMessage</p>
+            }
+
+            <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                <button @onclick="SaveEditSong" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; cursor: pointer; border-radius: 6px; font-weight: 500;">
+                    Save Changes
+                </button>
+                <button @onclick="CloseEditModal" style="padding: 10px 20px; background-color: #6c757d; color: white; border: none; cursor: pointer; border-radius: 6px; font-weight: 500;">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+}
 
 <!-- Display genres -->
 <div style="margin-top: 30px;">
@@ -125,6 +168,15 @@
     private string newGenre = "";
     private int newDuration = 0;
 
+    // Data for edit modal
+    private bool showEditModal = false;
+    private string editSongName = "";
+    private string editArtist = "";
+    private string editGenre = "";
+    private int editDuration = 0;
+    private string originalSongName = "";
+    private string editErrorMessage = "";
+
     // Display messages
     private string errorMessage = "";
     private string successMessage = "";
@@ -136,9 +188,20 @@
     // Scheduler instance
     private MusicScheduler scheduler = new MusicScheduler();
 
-    // Initialize the page
+    // Initialize the page - load default songs automatically
     protected override void OnInitialized()
     {
+        try
+        {
+            // Load default songs on page initialization
+            scheduler.LoadDefaultSongs();
+            successMessage = "Default songs loaded successfully!";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error loading default songs: " + ex.Message;
+        }
+        
         // Load songs and genres from scheduler
         RefreshData();
     }
@@ -212,25 +275,79 @@
         }
     }
 
+    // Open edit modal for a song
+    private void OpenEditModal(Song song)
+    {
+        originalSongName = song.Name;
+        editSongName = song.Name;
+        editArtist = song.Artist;
+        editGenre = song.Genre;
+        editDuration = song.DurationMinutes;
+        editErrorMessage = "";
+        showEditModal = true;
+    }
+
+    // Close edit modal
+    private void CloseEditModal()
+    {
+        showEditModal = false;
+        editErrorMessage = "";
+    }
+
+    // Save edited song
+    private void SaveEditSong()
+    {
+        editErrorMessage = "";
+
+        try
+        {
+            // Validate inputs
+            if (string.IsNullOrWhiteSpace(editSongName))
+            {
+                editErrorMessage = "Song name cannot be empty";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(editArtist))
+            {
+                editErrorMessage = "Artist cannot be empty";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(editGenre))
+            {
+                editErrorMessage = "Genre cannot be empty";
+                return;
+            }
+
+            if (editDuration <= 0)
+            {
+                editErrorMessage = "Duration must be greater than 0";
+                return;
+            }
+
+            // Edit song in scheduler
+            scheduler.EditSong(originalSongName, editSongName, editArtist, editGenre, editDuration);
+
+            // Close modal
+            CloseEditModal();
+
+            // Show success message
+            successMessage = "Song updated successfully!";
+
+            // Refresh display
+            RefreshData();
+        }
+        catch (Exception ex)
+        {
+            editErrorMessage = ex.Message;
+        }
+    }
+
     // Refresh songs and genres from scheduler
     private void RefreshData()
     {
         songs = scheduler.GetAllSongs();
         genres = scheduler.GetAllGenres();
-    }
-
-    // Load 20 default sample songs
-    private void LoadDefaultSongs()
-    {
-        try
-        {
-            scheduler.LoadDefaultSongs();
-            successMessage = "Loaded 20 sample songs successfully!";
-            RefreshData();
-        }
-        catch (Exception ex)
-        {
-            errorMessage = "Error loading sample songs: " + ex.Message;
-        }
     }
 }

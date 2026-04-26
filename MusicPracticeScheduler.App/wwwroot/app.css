@@ -36,3 +36,178 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+/* ========== Custom Styling ========== */
+
+/* Page Layout */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Headers */
+h1 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+h2 {
+    color: #667eea;
+    font-weight: 600;
+}
+
+h3 {
+    color: #764ba2;
+    font-weight: 600;
+}
+
+/* Buttons Styling */
+button {
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+    background-color: #667eea !important;
+    border: none !important;
+}
+
+.btn-primary:hover {
+    background-color: #5568d3 !important;
+}
+
+.btn-secondary {
+    background-color: #6c757d !important;
+    border: none !important;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268 !important;
+}
+
+/* Forms */
+input, textarea {
+    border-radius: 6px !important;
+    border: 1px solid #ddd !important;
+    padding: 8px 12px !important;
+}
+
+input:focus, textarea:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+}
+
+/* Tables */
+table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+table thead th {
+    border: none !important;
+    padding: 12px 8px !important;
+    font-weight: 600;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #eee !important;
+    transition: background-color 0.2s ease;
+}
+
+table tbody tr:hover {
+    background-color: #f5f7ff;
+}
+
+table tbody td {
+    border: none !important;
+    padding: 12px 8px !important;
+    color: #333;
+}
+
+/* Containers & Cards */
+.form-container, .content-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid #667eea;
+}
+
+/* Messages */
+.error-message {
+    color: #dc3545 !important;
+    background-color: #f8d7da;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    border-left: 4px solid #dc3545;
+}
+
+.success-message {
+    color: #155724 !important;
+    background-color: #d4edda;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    border-left: 4px solid #28a745;
+}
+
+/* Navigation Links */
+a {
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+    border-radius: 12px;
+}
+
+/* Lists */
+ul, ol {
+    padding-left: 20px;
+}
+
+li {
+    margin: 8px 0;
+    color: #555;
+}
+
+/* Spacing utilities */
+.mt-large {
+    margin-top: 30px !important;
+}
+
+.mb-large {
+    margin-bottom: 30px !important;
+}
+
+.p-large {
+    padding: 20px !important;
+}

@@ -1,23 +1,28 @@
 using System.Collections.Generic;
 using System.Linq;
 
-// MusicScheduler class - main class that manages songs and practice sessions
-// Uses Dictionary, HashSet, Queue, and Stack for different operations
+/// <summary>
+/// Manages the scheduling and organization of music practice sessions.
+/// Uses different data structures (Dictionary, HashSet, Queue, Stack) to efficiently manage songs and sessions.
+/// </summary>
 public class MusicScheduler
 {
-    // Dictionary to store songs by name - for fast lookup
+    /// <summary>Dictionary to store songs by name for fast lookup.</summary>
     private Dictionary<string, Song> songs;
     
-    // HashSet to store unique genres - prevents duplicates automatically
+    /// <summary>HashSet to store unique genres, automatically preventing duplicates.</summary>
     private HashSet<string> genres;
     
-    // Queue to store practice sessions in order (FIFO - first in first out)
+    /// <summary>Queue to store practice sessions in FIFO order (first in, first out).</summary>
     private Queue<PracticeSession> upcomingSessions;
     
-    // Stack to store recently practiced songs (LIFO - last in first out)
+    /// <summary>Stack to store recently practiced songs in LIFO order (last in, first out).</summary>
     private Stack<Song> recentlyPracticed;
 
-    // Constructor - initializes all data structures
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MusicScheduler"/> class.
+    /// Initializes all internal data structures for managing songs and sessions.
+    /// </summary>
     public MusicScheduler()
     {
         songs = new Dictionary<string, Song>();
@@ -26,8 +31,15 @@ public class MusicScheduler
         recentlyPracticed = new Stack<Song>();
     }
 
-    // Add a new song to the scheduler
-    // Returns the song if successful, throws exception if song name is empty or already exists
+    /// <summary>
+    /// Adds a new song to the scheduler.
+    /// </summary>
+    /// <param name="name">The name of the song to add. Cannot be null or empty.</param>
+    /// <param name="artist">The artist or composer of the song.</param>
+    /// <param name="genre">The music genre of the song.</param>
+    /// <param name="duration">The duration of the song in minutes.</param>
+    /// <returns>The newly created Song object.</returns>
+    /// <exception cref="Exception">Thrown when song name is empty or song already exists.</exception>
     public Song AddSong(string name, string artist, string genre, int duration)
     {
         // Check if name is empty
@@ -54,8 +66,11 @@ public class MusicScheduler
         return newSong;
     }
 
-    // Remove a song by name
-    // Returns true if removed, false if song not found
+    /// <summary>
+    /// Removes a song from the scheduler by its name.
+    /// </summary>
+    /// <param name="name">The name of the song to remove.</param>
+    /// <returns>True if the song was removed; false if the song was not found.</returns>
     public bool RemoveSong(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -66,15 +81,98 @@ public class MusicScheduler
         return songs.Remove(name);
     }
 
-    // Get all songs as a list
-    // Returns empty list if no songs
+    /// <summary>
+    /// Edits an existing song's information.
+    /// </summary>
+    /// <param name="originalName">The current name of the song to edit.</param>
+    /// <param name="newName">The new name for the song.</param>
+    /// <param name="artist">The updated artist or composer name.</param>
+    /// <param name="genre">The updated music genre.</param>
+    /// <param name="duration">The updated duration in minutes.</param>
+    /// <returns>The updated Song object.</returns>
+    /// <exception cref="Exception">Thrown when the song is not found or new name is empty or already exists.</exception>
+    public Song EditSong(string originalName, string newName, string artist, string genre, int duration)
+    {
+        // Check if original song exists
+        if (!songs.ContainsKey(originalName))
+        {
+            throw new Exception("Song not found");
+        }
+
+        // Check if new name is empty
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            throw new Exception("Song name cannot be empty");
+        }
+
+        // If name is changing and new name already exists (and is different)
+        if (newName != originalName && songs.ContainsKey(newName))
+        {
+            throw new Exception("Song with this name already exists");
+        }
+
+        // Get the existing song
+        Song song = songs[originalName];
+
+        // Remove old entry if name is changing
+        if (newName != originalName)
+        {
+            songs.Remove(originalName);
+        }
+
+        // Update song properties
+        song.Name = newName;
+        song.Artist = artist;
+        song.Genre = genre;
+        song.DurationMinutes = duration;
+
+        // Add back with new name if it changed
+        if (newName != originalName)
+        {
+            songs[newName] = song;
+        }
+
+        // Update genre set
+        genres.Add(genre);
+
+        return song;
+    }
+
+    /// <summary>
+    /// Retrieves a song by its name.
+    /// </summary>
+    /// <param name="name">The name of the song to retrieve.</param>
+    /// <returns>The Song object if found.</returns>
+    /// <exception cref="Exception">Thrown when the song name is empty or song is not found.</exception>
+    public Song GetSongByName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new Exception("Song name cannot be empty");
+        }
+
+        if (!songs.ContainsKey(name))
+        {
+            throw new Exception("Song not found");
+        }
+
+        return songs[name];
+    }
+
+    /// <summary>
+    /// Retrieves all songs in the scheduler.
+    /// </summary>
+    /// <returns>A list containing all Song objects. Returns an empty list if no songs exist.</returns>
     public List<Song> GetAllSongs()
     {
         return songs.Values.ToList();
     }
 
-    // Get all songs for a specific genre
-    // Returns empty list if no songs found for that genre
+    /// <summary>
+    /// Retrieves all songs of a specific genre.
+    /// </summary>
+    /// <param name="genre">The genre to filter songs by.</param>
+    /// <returns>A list of songs matching the specified genre. Returns an empty list if none found.</returns>
     public List<Song> GetSongsByGenre(string genre)
     {
         if (string.IsNullOrWhiteSpace(genre))
@@ -87,14 +185,22 @@ public class MusicScheduler
             .ToList();
     }
 
-    // Get all genres as a list
+    /// <summary>
+    /// Retrieves all unique genres in the scheduler.
+    /// </summary>
+    /// <returns>A list of all unique genre names.</returns>
     public List<string> GetAllGenres()
     {
         return genres.ToList();
     }
 
-    // Schedule a new practice session
-    // Adds to the queue for upcoming sessions
+    /// <summary>
+    /// Schedules a new practice session for a song.
+    /// </summary>
+    /// <param name="songName">The name of the song to practice. Must exist in the scheduler.</param>
+    /// <param name="duration">The duration of the practice session in minutes.</param>
+    /// <param name="notes">Optional notes or comments about the practice session.</param>
+    /// <exception cref="Exception">Thrown when song name is empty or song is not found.</exception>
     public void ScheduleSession(string songName, int duration, string notes)
     {
         if (string.IsNullOrWhiteSpace(songName))
@@ -111,15 +217,20 @@ public class MusicScheduler
         upcomingSessions.Enqueue(session);
     }
 
-    // Get all upcoming sessions as a list
-    // Queue doesn't have a direct way to get all items, so we convert to list
+    /// <summary>
+    /// Retrieves all upcoming practice sessions.
+    /// </summary>
+    /// <returns>A list of all upcoming PracticeSession objects in queue order.</returns>
     public List<PracticeSession> GetUpcomingSessions()
     {
         return upcomingSessions.ToList();
     }
 
-    // Complete the next scheduled session
-    // Removes from queue and adds song to recently practiced stack
+    /// <summary>
+    /// Completes the next scheduled practice session and records the song as recently practiced.
+    /// </summary>
+    /// <returns>The completed PracticeSession object.</returns>
+    /// <exception cref="Exception">Thrown when there are no upcoming sessions to complete.</exception>
     public PracticeSession CompleteNextSession()
     {
         if (upcomingSessions.Count == 0)
@@ -138,14 +249,20 @@ public class MusicScheduler
         return session;
     }
 
-    // Get recently practiced songs as a list
-    // Stack doesn't have a direct way to get all items, so we convert to list
+    /// <summary>
+    /// Retrieves recently practiced songs in reverse chronological order.
+    /// </summary>
+    /// <returns>A list of recently practiced Song objects, with most recent first.</returns>
     public List<Song> GetRecentlyPracticed()
     {
         return recentlyPracticed.ToList();
     }
 
-    // Mark a song as completed
+    /// <summary>
+    /// Marks a song as completed or mastered.
+    /// </summary>
+    /// <param name="songName">The name of the song to mark as completed.</param>
+    /// <exception cref="Exception">Thrown when song name is empty or song is not found.</exception>
     public void MarkSongComplete(string songName)
     {
         if (string.IsNullOrWhiteSpace(songName))
@@ -161,19 +278,29 @@ public class MusicScheduler
         songs[songName].IsCompleted = true;
     }
 
-    // Check if a song exists
+    /// <summary>
+    /// Checks if a song exists in the scheduler.
+    /// </summary>
+    /// <param name="songName">The name of the song to check.</param>
+    /// <returns>True if the song exists; false otherwise.</returns>
     public bool SongExists(string songName)
     {
         return songs.ContainsKey(songName);
     }
 
-    // Get total number of songs
+    /// <summary>
+    /// Gets the total number of songs in the scheduler.
+    /// </summary>
+    /// <returns>The count of songs currently stored.</returns>
     public int GetTotalSongs()
     {
         return songs.Count;
     }
 
-    // Clear all data (useful for testing)
+    /// <summary>
+    /// Clears all data from the scheduler.
+    /// Removes all songs, genres, sessions, and practice history.
+    /// </summary>
     public void Clear()
     {
         songs.Clear();

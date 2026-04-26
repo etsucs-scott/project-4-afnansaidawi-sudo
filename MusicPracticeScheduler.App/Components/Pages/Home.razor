@@ -2,29 +2,39 @@
 
 <PageTitle>Music Practice Scheduler</PageTitle>
 
+<!-- Banner Image -->
+<div style="margin-bottom: 30px; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <img src="music-banner.svg" alt="Music Practice Scheduler" style="width: 100%; height: auto; display: block;">
+</div>
+
 <h1>Music Practice Scheduler</h1>
 
-<p>Welcome! This app helps you organize and track your music practice sessions.</p>
+<p style="color: #666; font-size: 16px; line-height: 1.6;">Welcome! This app helps you organize and track your music practice sessions.</p>
 
-<div style="margin: 20px 0;">
-    <h3>What you can do:</h3>
-    <ul>
+<div class="form-container" style="border-left-color: #667eea;">
+    <h3 style="margin-top: 0;">What you can do:</h3>
+    <ul style="color: #555;">
         <li>Manage your songs and organize them by genre</li>
         <li>Schedule practice sessions and track them</li>
         <li>See your recently practiced songs</li>
     </ul>
 </div>
 
-<div style="margin: 20px 0;">
-    <h3>Get Started:</h3>
-    <NavLink href="songs" class="btn btn-primary">Go to Songs</NavLink>
-    <NavLink href="schedule" class="btn btn-primary" style="margin-left: 10px;">Go to Schedule</NavLink>
-    <button @onclick="LoadDefaultSongs" class="btn btn-secondary" style="margin-left: 10px;">Load Sample Data</button>
-    <p>Total Songs: <strong>@totalSongs</strong></p>
-    <p>Upcoming Sessions: <strong>@upcomingSessions</strong></p>
+<div class="form-container" style="border-left-color: #764ba2;">
+    <h3 style="margin-top: 0;">Get Started:</h3>
+    <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+        <NavLink href="songs" class="btn btn-primary">Go to Songs</NavLink>
+        <NavLink href="schedule" class="btn btn-primary">Go to Schedule</NavLink>
+    </div>
+    
+    <div style="background-color: #f0f4ff; padding: 15px; border-radius: 6px; margin-bottom: 10px;">
+        <p style="margin: 5px 0; color: #333;"><strong>Total Songs:</strong> <span style="color: #667eea; font-weight: bold;">@totalSongs</span></p>
+        <p style="margin: 5px 0; color: #333;"><strong>Upcoming Sessions:</strong> <span style="color: #764ba2; font-weight: bold;">@upcomingSessions</span></p>
+    </div>
+    
     @if (!string.IsNullOrWhiteSpace(message))
     {
-        <p style="color: green; font-weight: bold;">@message</p>
+        <p style="color: #155724; background-color: #d4edda; padding: 12px; border-radius: 6px; border-left: 4px solid #28a745; margin-top: 10px;">@message</p>
     }
 </div>
 
@@ -38,23 +48,19 @@
 
     protected override void OnInitialized()
     {
-        // Initialize with default values
-        UpdateStats();
-    }
-
-    // Load 20 default sample songs
-    private void LoadDefaultSongs()
-    {
+        // Load default songs automatically on page load
         try
         {
             scheduler.LoadDefaultSongs();
-            message = "Loaded 20 sample songs successfully!";
-            UpdateStats();
+            message = "Sample songs loaded automatically!";
         }
         catch (Exception ex)
         {
             message = "Error loading sample songs: " + ex.Message;
         }
+        
+        // Update statistics display
+        UpdateStats();
     }
 
     // Update statistics display
