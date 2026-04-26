@@ -309,8 +309,11 @@ public class MusicScheduler
         recentlyPracticed.Clear();
     }
 
-    // Load default songs for demonstration
-    // This method adds 20 sample songs to get started
+    /// <summary>
+    /// Loads a collection of 20 default sample songs into the scheduler.
+    /// Clears any existing data first and populates with songs from various artists and genres.
+    /// Useful for demonstration and testing purposes.
+    /// </summary>
     public void LoadDefaultSongs()
     {
         // Clear existing data first

@@ -1,6 +1,5 @@
 /// <summary>
-/// Represents a song that the user is learning to play.
-/// Contains all relevant information about a musical piece including artist, genre, and progress tracking.
+/// Represents a song that the user is learning or practicing.
 /// </summary>
 public class Song
 {
@@ -10,7 +9,7 @@ public class Song
     /// <summary>Gets or sets the artist or composer of the song.</summary>
     public string Artist { get; set; }
 
-    /// <summary>Gets or sets the music genre of the song (e.g., Rock, Pop, Classical).</summary>
+    /// <summary>Gets or sets the music genre of the song.</summary>
     public string Genre { get; set; }
 
     /// <summary>Gets or sets the duration of the song in minutes.</summary>
@@ -33,7 +32,7 @@ public class Song
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Song"/> class with specified values.
+    /// Initializes a new instance of the <see cref="Song"/> class with all fields.
     /// </summary>
     /// <param name="name">The name of the song.</param>
     /// <param name="artist">The artist or composer of the song.</param>

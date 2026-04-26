@@ -1,22 +1,36 @@
 using System.Text.Json;
 
-// LocalStorageService - handles saving and loading data as JSON
-// This is a simple service for a beginner project
+/// <summary>
+/// Provides serialization and deserialization functionality for the music scheduler data.
+/// Converts between MusicScheduler objects and JSON format for storage purposes.
+/// </summary>
 public class LocalStorageService
 {
-    // Key where data is stored in browser localStorage
+    /// <summary>The storage key used to identify scheduler data in browser localStorage.</summary>
     private const string StorageKey = "musicSchedulerData";
 
-    // A simple data container to store all scheduler data
+    /// <summary>
+    /// Data container that holds all scheduler information in a serializable format.
+    /// Contains songs, practice sessions, and genres.
+    /// </summary>
     public class SchedulerData
     {
+        /// <summary>Gets or sets the list of songs managed by the scheduler.</summary>
         public List<Song> Songs { get; set; } = new List<Song>();
+
+        /// <summary>Gets or sets the list of upcoming practice sessions.</summary>
         public List<PracticeSession> Sessions { get; set; } = new List<PracticeSession>();
+
+        /// <summary>Gets or sets the list of unique genres in the scheduler.</summary>
         public List<string> Genres { get; set; } = new List<string>();
     }
 
-    // Convert scheduler data to JSON string
-    // This method takes all the data and converts it to JSON format
+    /// <summary>
+    /// Converts a MusicScheduler object to its JSON string representation.
+    /// </summary>
+    /// <param name="scheduler">The MusicScheduler object to serialize.</param>
+    /// <returns>A JSON string containing all scheduler data.</returns>
+    /// <exception cref="Exception">Thrown if serialization encounters an error.</exception>
     public string SerializeScheduler(MusicScheduler scheduler)
     {
         try
@@ -38,8 +52,13 @@ public class LocalStorageService
         }
     }
 
-    // Convert JSON string back to scheduler
-    // This method takes JSON and reconstructs the scheduler data
+    /// <summary>
+    /// Converts a JSON string back into a populated MusicScheduler object.
+    /// Reconstructs all songs and their properties from the serialized data.
+    /// </summary>
+    /// <param name="json">The JSON string containing scheduler data.</param>
+    /// <returns>A new MusicScheduler object populated with data from the JSON string.</returns>
+    /// <exception cref="Exception">Thrown if deserialization encounters an error.</exception>
     public MusicScheduler DeserializeScheduler(string json)
     {
         try
