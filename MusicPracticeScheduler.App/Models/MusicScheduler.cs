@@ -143,7 +143,6 @@ public class MusicScheduler
     /// </summary>
     /// <param name="name">The name of the song to retrieve.</param>
     /// <returns>The Song object if found.</returns>
-    /// <exception cref="Exception">Thrown when the song name is empty or song is not found.</exception>
     public Song GetSongByName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
